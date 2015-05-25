@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+	<meta charset="UTF-8">
+	<title>文字列変換　マークダウン</title>
+	<script src="http://ajax.googleapis.com/ajax/libs/jquery/1.11.0/jquery.min.js"></script>
+	<style>
+		textarea.inOut {width: 640px; height: 150px;}
+	</style>
+</head>
+<body>
+	<h1></h1>
+	<h2>入力</h2>
+	<textarea class="inOut" id="srcArea"># h1
+## h2
+### h3
+-----
+* list
+* list</textarea><Br><br>
+	<input type="button" value="実行" id="btn"><br><br>
+	<h2>出力</h2>
+	<textarea class="inOut" id="resArea"></textarea><br>
+	<hr>
+	<div id="resArea2"></div>
+
+	<script type="text/javascript">
+		$(function(){
+			$("#btn").click(function(){
+				var src = $("#srcArea").val(); //入力
+
+				var res = src;
+				res = markdown(res); //マークダウン
+				$("#resArea2").html(res); //html出力
+
+				$("#resArea").val(res); //出力
+				console.log(res);
+			})
+			//タイトルをh1タグの中に表示
+			$("h1").text(document.title);
+		});
+
+		//マークダウン処理
+		function markdown(src){
+
+			var res = src;
+			//.replace(文字置換
+				//正規表現っぽい (/^# (.+?)$/gm,   "<h1>$1</h1>")
+			res = res.replace(/^# (.+?)$/gm,   "<h1>$1</h1>");
+			res = res.replace(/^## (.+?)$/gm,  "<h2>$1</h2>");
+			res = res.replace(/^### (.+?)$/gm, "<h3>$1</h3>");
+			res = res.replace(/''(.+?)''/g ,   "<b>$1</b>");
+			res = res.replace(/-----/g, "<hr>");
+			res = res.replace(/^\* (.+?)$/gm, "<ul><li>$1</li></ul>");
+
+			return res;
+		}
+	</script>
+</body>
+</html>
